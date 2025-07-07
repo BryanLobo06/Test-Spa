@@ -46,7 +46,7 @@ spa/
 
 1. **Clona o descarga el proyecto**
    ```bash
-   git clone <url-del-repositorio>
+   git clone https://github.com/BryanLobo06/Test-Spa.git
    cd spa
    ```
 
