@@ -1,0 +1,38 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin Usuario",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "role": "user",
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "María García",
+      "email": "maria@example.com",
+      "password": "maria123",
+      "role": "user"
+    },
+    {
+      "id": "4",
+      "name": "Carlos López",
+      "email": "carlos@example.com",
+      "password": "carlos123",
+      "role": "user"
+    },
+    {
+      "id": "5",
+      "name": "Brayan Balcazar",
+      "email": "bryanbalcazar307@gmail.com",
+      "role": "admin",
+      "password": "1234"
+    }
+  ]
+}

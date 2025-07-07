@@ -1,0 +1,24 @@
+{
+  "name": "spa-login",
+  "version": "1.0.0",
+  "description": "SPA con sistema de login usando HTML, CSS, JavaScript y json-server",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "json-server --watch db/db.json --port 3000",
+    "dev": "json-server --watch db/db.json --port 3000",
+    "serve": "npx http-server public -p 8080 -c-1",
+    "reset-db": "node reset-db.js"
+  },
+  "keywords": [
+    "spa",
+    "login",
+    "javascript",
+    "json-server"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "devDependencies": {
+    "json-server": "^0.17.4",
+    "http-server": "^14.1.1"
+  }
+} 
