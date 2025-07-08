@@ -1,5 +1,8 @@
+import { authService } from './auth.js';
+import { apiService } from './api.js';
+
 // Clase principal de la aplicación SPA
-class App {
+export class App {
     constructor() {
         this.appElement = document.getElementById('app');
         this.init();
@@ -37,6 +40,10 @@ class App {
                     <div class="form-group">
                         <label for="password">Contraseña:</label>
                         <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <label for="rememberMe" style="display:inline;">Recordarme</label>
                     </div>
                     <button type="submit" class="btn">Iniciar Sesión</button>
                 </form>
@@ -250,13 +257,21 @@ class App {
             email: formData.get('email'),
             role: formData.get('role')
         };
-
         const password = formData.get('password');
         if (password) {
             userData.password = password;
         }
-
         try {
+            // Validar que la contraseña no esté repetida SOLO si se cambia o agrega
+            if (userData.password && userData.password.trim() !== '') {
+                const users = await apiService.getUsers();
+                const passwordHash = window.CryptoJS.SHA256(userData.password).toString();
+                const isDuplicate = users.some(u => u.password === passwordHash && (mode === 'add' || (mode === 'edit' && Number(u.id) !== Number(userId))));
+                if (isDuplicate) {
+                    this.showError('La contraseña ya está en uso por otro usuario. Elige una diferente.');
+                    return;
+                }
+            }
             if (mode === 'add') {
                 await apiService.createUser(userData);
                 this.showSuccess('Usuario agregado correctamente');
@@ -264,7 +279,6 @@ class App {
                 await apiService.updateUser(userId, userData);
                 this.showSuccess('Usuario actualizado correctamente');
             }
-
             this.closeModal(modal);
             await this.loadUsers();
         } catch (error) {
@@ -295,6 +309,7 @@ class App {
     async handleLogin() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const remember = document.getElementById('rememberMe')?.checked;
         const errorMessage = document.getElementById('errorMessage');
         const submitBtn = document.querySelector('#loginForm button');
         
@@ -314,7 +329,7 @@ class App {
             errorMessage.style.display = 'none';
 
             // Intentar login
-            await authService.login(email, password);
+            await authService.login(email, password, remember);
             
             // Renderizar dashboard
             this.render();
@@ -338,16 +353,43 @@ class App {
 
     // Mostrar mensaje de error
     showError(message) {
-        const errorMessage = document.getElementById('errorMessage');
-        if (errorMessage) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+        let globalDiv = document.getElementById('global-messages');
+        if (!globalDiv) {
+            globalDiv = document.createElement('div');
+            globalDiv.id = 'global-messages';
+            document.body.prepend(globalDiv);
         }
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        `;
+        globalDiv.appendChild(errorDiv);
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+            }
+        }, 5000);
     }
 
     // Mostrar mensaje de éxito
     showSuccess(message) {
-        // Crear mensaje de éxito temporal
+        // Usar el contenedor global
+        let globalDiv = document.getElementById('global-messages');
+        if (!globalDiv) {
+            globalDiv = document.createElement('div');
+            globalDiv.id = 'global-messages';
+            document.body.prepend(globalDiv);
+        }
         const successDiv = document.createElement('div');
         successDiv.className = 'success-message';
         successDiv.textContent = message;
@@ -362,9 +404,7 @@ class App {
             z-index: 1000;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         `;
-        
-        document.body.appendChild(successDiv);
-        
+        globalDiv.appendChild(successDiv);
         setTimeout(() => {
             if (successDiv.parentNode) {
                 successDiv.parentNode.removeChild(successDiv);

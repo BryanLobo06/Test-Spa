@@ -4,35 +4,29 @@
       "id": "1",
       "name": "Admin Usuario",
       "email": "admin@example.com",
-      "password": "admin123",
+      "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
       "role": "admin"
     },
     {
+      "id": "2",
       "name": "Juan Pérez",
       "email": "juan@example.com",
-      "role": "user",
-      "id": "2"
+      "password": "f6ccb3e8d609012238c0b39e60b2c9632b3cdede91e035dad1de43469768f4cc",
+      "role": "user"
     },
     {
       "id": "3",
       "name": "María García",
       "email": "maria@example.com",
-      "password": "maria123",
+      "password": "626e3c805e77eeb472c42c6be607be2af7ac5c08fd7050f278e0330fe81abf57",
       "role": "user"
     },
     {
       "id": "4",
       "name": "Carlos López",
       "email": "carlos@example.com",
-      "password": "carlos123",
+      "password": "ac9c2c34c9f7ad52528c3422af40a66e2e24aaf2a727831255413c9470158984",
       "role": "user"
-    },
-    {
-      "id": "5",
-      "name": "Brayan Balcazar",
-      "email": "bryanbalcazar307@gmail.com",
-      "role": "admin",
-      "password": "1234"
     }
   ]
 }

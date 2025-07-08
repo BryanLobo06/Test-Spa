@@ -18,7 +18,10 @@
   "author": "Tu Nombre",
   "license": "MIT",
   "devDependencies": {
-    "json-server": "^0.17.4",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "json-server": "^0.17.4"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0"
   }
-} 
+}

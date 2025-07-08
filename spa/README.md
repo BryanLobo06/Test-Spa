@@ -1,19 +1,38 @@
-# SPA con Sistema de Login y Panel de Administración
+# SPA de Usuarios con Login y Panel de Administración
 
-Una aplicación de página única (SPA) con sistema de autenticación y panel de administración, desarrollada con HTML, CSS, JavaScript y json-server.
+> ⚠️ **Advertencia sobre contraseñas y hashes:**
+>
+> En este proyecto, las contraseñas de los usuarios se almacenan como hashes SHA256 usando la librería [crypto-js](https://www.npmjs.com/package/crypto-js). Cuando un usuario se registra o se edita, la contraseña se convierte a un hash antes de guardarse en la base de datos (`db.json`). Al iniciar sesión, la contraseña ingresada se hashea y se compara con el hash almacenado.
+>
+> **Limitaciones:**
+> - SHA256 es un hash rápido y no es seguro para proteger contraseñas en producción.
+> - No se utiliza salting ni algoritmos lentos como bcrypt, scrypt o Argon2.
+> - json-server no es un backend real y no protege contra ataques.
+>
+> **Este sistema es solo para fines educativos y de demostración.**
+> Para producción, usa un backend real, algoritmos de hash seguros y almacenamiento protegido.
 
 ---
 
-## 🚀 Características
+## ⚠️ Importante sobre los IDs en db.json
 
-- **Login y logout** con persistencia de sesión (localStorage)
-- **Panel de administración** exclusivo para usuarios admin
-- **CRUD completo de usuarios** (Crear, Leer, Actualizar, Eliminar)
+- **Los IDs de los usuarios en `db.json` deben ser números, únicos y secuenciales** (por ejemplo: 1, 2, 3, ...).
+- **No uses strings como ID** (por ejemplo: "1" o "abc"). json-server solo reconoce correctamente los IDs numéricos para rutas como `/users/1`.
+- **No debe haber IDs duplicados ni saltos grandes**. Si editas manualmente el archivo, asegúrate de mantener la secuencia.
+- **Si cambias los IDs o agregas usuarios manualmente, reinicia json-server** para que los cambios se reflejen correctamente.
+- Si tienes problemas para editar o eliminar usuarios, revisa que los IDs sean correctos y reinicia el servidor.
+
+---
+
+## 📝 Resumen
+
+- **Login seguro** (simulado) y persistencia de sesión
+- **Panel de administración** para usuarios admin
+- **CRUD de usuarios** (crear, leer, actualizar, eliminar)
 - **Roles diferenciados**: admin y user
-- **Mensajes de éxito y error** claros y visibles
-- **Diseño responsivo y moderno**
+- **Diseño responsivo y profesional**
 - **API REST simulada** con json-server
-- **Estructura profesional y modular**
+- **Código modular con ES Modules (import/export)**
 
 ---
 
@@ -26,51 +45,59 @@ spa/
 │   └── favicon.ico         # Icono de la app
 ├── src/
 │   ├── css/
-│   │   └── styles.css      # Estilos de la aplicación
+│   │   └── styles.css      # Estilos globales
 │   ├── js/
-│   │   ├── api.js          # Servicio de API
-│   │   ├── auth.js         # Servicio de autenticación
-│   │   └── app.js          # Lógica principal de la SPA
+│   │   ├── api.js          # Servicio de API (export)
+│   │   ├── auth.js         # Servicio de autenticación (export)
+│   │   ├── app.js          # Lógica principal (export)
+│   │   └── main.js         # Punto de entrada único (importa app.js)
 │   ├── views/              # Fragmentos HTML (futuro)
 │   └── assets/             # Recursos gráficos (opcional)
 ├── db/
 │   └── db.json            # Base de datos simulada
 ├── package.json           # Configuración del proyecto
 ├── package-lock.json      # Versionado exacto de dependencias
-└── README.md              # Documentación completa
+└── README.md              # Documentación
 ```
 
 ---
 
-## 🛠️ Instalación y Ejecución
+## 🚀 Instalación y Ejecución
 
-1. **Clona o descarga el proyecto**
+1. **Clona el repositorio**
    ```bash
-   git clone https://github.com/BryanLobo06/Test-Spa.git
+   git clone <url-del-repositorio>
    cd spa
    ```
-
 2. **Instala las dependencias**
    ```bash
    npm install
    ```
-
-3. **Inicia json-server (backend simulado)**
+3. **Inicia json-server (API REST)**
    ```bash
    npm start
    ```
-   El servidor estará disponible en: [http://localhost:3000](http://localhost:3000)
-
-4. **En otra terminal, sirve los archivos estáticos**
+   El backend estará en: [http://localhost:3000](http://localhost:3000)
+4. **Sirve los archivos estáticos**
    ```bash
    npm run serve
    ```
-   La aplicación estará disponible en: [http://localhost:8080](http://localhost:8080)
-
-5. **(Opcional) Reinicia la base de datos a su estado original**
+   La app estará en: [http://localhost:8080](http://localhost:8080)
+5. **(Opcional) Reinicia la base de datos**
    ```bash
    npm run reset-db
    ```
+
+---
+
+## 🖥️ Uso de la Aplicación
+
+1. **Inicia sesión** con uno de los usuarios de prueba.
+2. **Si eres admin**, accede al panel de administración:
+   - Visualiza, agrega, edita y elimina usuarios
+   - Cambia roles de usuario
+3. **Si eres user**, accede a tu dashboard personal.
+4. **Cierra sesión** con el botón correspondiente.
 
 ---
 
@@ -83,28 +110,11 @@ spa/
 | maria@example.com      | maria123    | user  |
 | carlos@example.com     | carlos123   | user  |
 
-### Funcionalidades por Rol
-
 - **Administrador (admin):**
-  - Acceso al panel de administración
-  - Ver, agregar, editar y eliminar usuarios
-  - Cambiar roles de usuarios
+  - Acceso total al panel de usuarios
+  - CRUD completo y cambio de roles
 - **Usuario (user):**
-  - Acceso al dashboard básico
-  - Ver información personal
-  - Cerrar sesión
-
----
-
-## 🖥️ Uso de la Aplicación
-
-1. **Inicia sesión** con uno de los usuarios de prueba.
-2. **Si eres admin**, accede al panel de administración:
-   - Visualiza la tabla de usuarios
-   - Agrega, edita o elimina usuarios
-   - Los IDs de usuarios se muestran en la tabla (no se reordenan automáticamente tras eliminar)
-3. **Si eres user**, accede a tu dashboard personal.
-4. **Cierra sesión** con el botón correspondiente.
+  - Solo ve su información y puede cerrar sesión
 
 ---
 
@@ -113,6 +123,15 @@ spa/
 - `npm start`      → Inicia json-server (API REST en puerto 3000)
 - `npm run serve`  → Sirve la carpeta `public/` en puerto 8080
 - `npm run reset-db` → Restaura la base de datos a su estado original
+
+---
+
+## 🎨 Personalización
+
+- **Colores y estilos:** Edita `src/css/styles.css`
+- **Usuarios iniciales:** Edita `db/db.json`
+- **Icono:** Cambia `public/favicon.ico` y la ruta en `index.html`
+- **Agrega campos:** Modifica los formularios y la base de datos
 
 ---
 
@@ -128,6 +147,18 @@ spa/
   - Usa el navegador en modo incógnito o limpia la caché.
 - **No se ven los cambios en los estilos:**
   - Limpia la caché del navegador o recarga forzadamente (Ctrl+F5).
+
+---
+
+## 🛡️ Recomendaciones y Buenas Prácticas
+
+- **No uses este sistema en producción:** Las contraseñas están en texto plano y no hay seguridad real.
+- **Para producción:**
+  - Usa un backend real con autenticación segura (JWT, OAuth, etc.)
+  - Hashea las contraseñas
+  - Usa HTTPS
+- **Personaliza los estilos** en `src/css/styles.css` para adaptar la app a tu marca.
+- **Agrega más campos** a los usuarios editando `db/db.json` y los formularios.
 
 ---
 

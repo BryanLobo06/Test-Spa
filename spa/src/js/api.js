@@ -1,8 +1,9 @@
+// No import CryptoJS, usar window.CryptoJS
 // Configuración de la API
 const API_BASE_URL = 'http://localhost:3000';
 
 // Clase para manejar las llamadas a la API
-class ApiService {
+export class ApiService {
     constructor() {
         this.baseURL = API_BASE_URL;
     }
@@ -71,7 +72,8 @@ class ApiService {
             // Agregar el ID al userData
             const userWithId = {
                 id: nextId,
-                ...userData
+                ...userData,
+                password: userData.password ? window.CryptoJS.SHA256(userData.password).toString() : ''
             };
             
             console.log(`Creando usuario con ID: ${nextId}`);
@@ -88,9 +90,14 @@ class ApiService {
 
     // Actualizar un usuario
     async updateUser(id, userData) {
+        // Si se pasa una nueva contraseña, hashearla
+        const dataToUpdate = { ...userData };
+        if (userData.password) {
+            dataToUpdate.password = window.CryptoJS.SHA256(userData.password).toString();
+        }
         return this.request(`/users/${id}`, {
             method: 'PUT',
-            body: JSON.stringify(userData)
+            body: JSON.stringify(dataToUpdate)
         });
     }
 
@@ -135,4 +142,4 @@ class ApiService {
 }
 
 // Instancia global de la API
-const apiService = new ApiService(); 
+export const apiService = new ApiService(); 
